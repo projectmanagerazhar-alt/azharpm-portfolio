@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>404 — Not found · Azharpm.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div id="header"></div>
+
+<section style="padding: calc(var(--header-h) + 140px) 0 140px;text-align:center;">
+  <div class="container">
+    <div class="section-eyebrow" style="justify-content:center;">404</div>
+    <h1 class="section-title" style="font-size:clamp(3rem,7vw,5rem);">Page not found.</h1>
+    <p class="section-lede" style="margin:0 auto 30px;">The page you requested has moved or does not exist.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+      <a href="index.html" class="btn btn--primary">Back to home <span class="arrow">→</span></a>
+      <a href="projects.html" class="btn btn--ghost">View projects</a>
+    </div>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script type="module">
+  import { renderHeader, renderFooter } from './js/components.js';
+  renderHeader(); renderFooter();
+</script>
+</body>
+</html>

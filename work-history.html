@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Work History — Azharuddin Mohammed</title>
+<meta name="description" content="Career timeline of Azharuddin Mohammed — Fit-Out Project Manager, UAE & GCC." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div id="header"></div>
+
+<section style="padding: calc(var(--header-h) + 80px) 0 40px;">
+  <div class="container">
+    <span class="section-eyebrow">Career</span>
+    <h1 class="section-title" style="font-size:clamp(2.4rem,5vw,4rem);">Work history</h1>
+    <p class="section-lede">Professional timeline. Edit each entry in <code>js/site-data.js</code> under <code>workHistory</code>.</p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container" style="max-width:880px;">
+    <div class="timeline" id="timeline"></div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container" style="text-align:center;">
+    <a href="cv.html" class="btn btn--primary">Download full CV <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script type="module">
+  import { renderHeader, renderFooter } from './js/components.js';
+  import { initReveal } from './js/animations.js';
+  import { SITE } from './js/site-data.js';
+
+  renderHeader();
+  renderFooter();
+  initReveal();
+
+  document.getElementById('timeline').innerHTML = SITE.workHistory.map(w => `
+    <div class="timeline__item reveal">
+      <div class="timeline__date">${w.date}</div>
+      <div class="timeline__title">${w.title}</div>
+      <div class="timeline__company">${w.company} <span>· ${w.location}</span></div>
+      <ul class="timeline__points">${w.points.map(p => `<li>${p}</li>`).join('')}</ul>
+    </div>
+  `).join('');
+  initReveal();
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Achievements — Azharuddin Mohammed</title>
+<meta name="description" content="Project achievements, delivery metrics, and outcomes — Azharuddin Mohammed, Fit-Out Project Manager." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div id="header"></div>
+
+<section style="padding: calc(var(--header-h) + 80px) 0 40px;">
+  <div class="container">
+    <span class="section-eyebrow">Achievements</span>
+    <h1 class="section-title" style="font-size:clamp(2.4rem,5vw,4rem);">Delivery achievements</h1>
+    <p class="section-lede">Editable metrics. Replace each placeholder with the verified figure once confirmed. Edit in <code>js/site-data.js</code> under <code>achievements</code>.</p>
+  </div>
+</section>
+
+<section class="section section--tight" style="padding-top:20px;">
+  <div class="container">
+    <div class="notice">
+      <div><b>Note —</b> Numbers shown in dashed brackets are <b>placeholders</b>. Replace them only with figures you can verify.</div>
+    </div>
+    <div class="achievement-grid reveal-stagger" id="achievements"></div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:30px;">
+      <span class="section-eyebrow">Recognition</span>
+      <h2 class="section-title">Awards & certifications</h2>
+    </div>
+    <div class="notice">
+      <div>This section is intentionally empty. Add awards or certifications only when documented evidence is available. Edit this page directly to add cards.</div>
+    </div>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script type="module">
+  import { renderHeader, renderFooter } from './js/components.js';
+  import { initReveal } from './js/animations.js';
+  import { SITE } from './js/site-data.js';
+
+  renderHeader();
+  renderFooter();
+  initReveal();
+
+  document.getElementById('achievements').innerHTML = SITE.achievements.map(a => `
+    <div class="achievement">
+      <div class="achievement__metric">${a.placeholder ? `<span class="achievement__placeholder">${a.metric}</span>` : a.metric}</div>
+      <div class="achievement__label">${a.label}</div>
+      <div class="achievement__desc">${a.desc}</div>
+    </div>
+  `).join('');
+</script>
+</body>
+</html>

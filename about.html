@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About — Azharuddin Mohammed | Fit-Out Project Manager</title>
+<meta name="description" content="About Azharuddin Mohammed — senior client-side Fit-Out Project Manager based in the UAE. Profile, approach, and project responsibilities." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div id="header"></div>
+
+<section style="padding: calc(var(--header-h) + 80px) 0 60px;">
+  <div class="container">
+    <span class="section-eyebrow">About</span>
+    <h1 class="section-title" style="font-size:clamp(2.4rem,5vw,4rem);max-width:880px;">10+ years. Three disciplines. AED 110M+ delivered.</h1>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="bio">
+      <div class="bio__portrait reveal" id="portrait">
+        <div class="bio__portrait-empty">[ Portrait photo placeholder ]<br><br>To add your photo, drop the image into <b>assets/images/</b> and update <b>SITE.portrait</b> in <b>js/site-data.js</b>.</div>
+      </div>
+      <div class="bio__text reveal">
+        <p><strong>Azharuddin Mohammed</strong> is a Senior Fit-Out Project Manager with 10+ years of UAE and KSA experience and a career portfolio of <strong style="color:var(--text-0);">AED 110M+</strong> spanning <strong style="color:var(--text-0);">46+ projects</strong> across Dubai, Abu Dhabi, Sharjah, Jeddah, and Riyadh.</p>
+        <p>He is currently <strong style="color:var(--text-0);">Project Manager — Fit-Out &amp; Retail Expansion at Omorfia Group</strong>, leading the Bedashing Beauty UAE &amp; KSA store rollout. To date this programme covers 14 concurrent projects (AED 30M+ approved CAPEX, 43,800+ sqft delivered) with AED 3.9M+ in CAPEX savings and AED 1.2M+ in contractor variation claims rejected — all contracts held at agreed value.</p>
+        <p>Previously, he spent seven years at <strong style="color:var(--text-0);">StudioX Technical Works LLC / NStyle International</strong> as Fit-Out Project Manager — delivering 32+ projects across three disciplines: 18+ NStyle retail branch renovations and new openings, 5 F&amp;B shell &amp; core projects for Sapori di Bice and BiceMare in Dubai (AED 23M aggregate programme), and 8 high-end residential villa restorations.</p>
+        <p>Across both roles he has personally led authority submissions across <strong style="color:var(--text-0);">DM, ADM, DCD/ADCD, DEWA, SEWA, DHA</strong>, plus mall management approvals for every project — building cross-discipline UAE regulatory expertise. He started his career as a Project Engineer (MEP) at Power Bright Electromechanical Works, providing the technical foundation that underpins his coordination work today.</p>
+        <p>He holds an Executive MBA in Project Management (BIMS College, 2023), a B.Tech in Mechanical Engineering, and is an Autodesk AutoCAD Certified User. PMP is enrolled and in progress (2026).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:40px;">
+      <span class="section-eyebrow">Approach</span>
+      <h2 class="section-title">How I run projects</h2>
+    </div>
+    <div class="service-grid reveal-stagger">
+      <div class="service-card">
+        <div class="service-card__num">01</div>
+        <h3 class="service-card__title">Client-side first</h3>
+        <p class="service-card__desc">Every decision is filtered through the client's commercial position — programme, cost, and quality.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__num">02</div>
+        <h3 class="service-card__title">Hold the programme</h3>
+        <p class="service-card__desc">Weekly progress reporting, look-ahead planning, and contractor accountability meetings keep dates honest.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__num">03</div>
+        <h3 class="service-card__title">Scrutinise variations</h3>
+        <p class="service-card__desc">Every VO is reviewed against scope, drawings, and entitlement before it lands on the client's desk.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__num">04</div>
+        <h3 class="service-card__title">Coordinate authorities</h3>
+        <p class="service-card__desc">Approvals tracked from day one — Dubai Municipality, DCD, Trakhees, Civil Defence, mall management.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__num">05</div>
+        <h3 class="service-card__title">Close it properly</h3>
+        <p class="service-card__desc">Snag lists, O&amp;M packs, warranty packs, FM handover — operational closeout is part of the job, not an afterthought.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-card__num">06</div>
+        <h3 class="service-card__title">Direct communication</h3>
+        <p class="service-card__desc">Plain reporting, escalation when needed, no hiding behind email chains.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:30px;">
+      <span class="section-eyebrow">Core skills</span>
+      <h2 class="section-title">Capabilities</h2>
+    </div>
+    <div class="skills reveal" id="skills"></div>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script type="module">
+  import { renderHeader, renderFooter } from './js/components.js';
+  import { initReveal } from './js/animations.js';
+  import { SITE } from './js/site-data.js';
+
+  renderHeader();
+  renderFooter();
+  initReveal();
+
+  if (SITE.portrait) {
+    document.getElementById('portrait').innerHTML = `<img src="${SITE.portrait}" alt="${SITE.name}" />`;
+  }
+
+  document.getElementById('skills').innerHTML = SITE.skills.map(s => `<span class="skill-tag">${s}</span>`).join('');
+</script>
+</body>
+</html>

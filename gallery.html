@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gallery — Azharuddin Mohammed | Project Photos</title>
+<meta name="description" content="Photo gallery from completed and ongoing fit-out projects across UAE and GCC." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div id="header"></div>
+
+<section style="padding: calc(var(--header-h) + 80px) 0 40px;">
+  <div class="container">
+    <span class="section-eyebrow">Gallery</span>
+    <h1 class="section-title" style="font-size:clamp(2.4rem,5vw,4rem);">Project gallery</h1>
+    <p class="section-lede">Photos from completed projects. Filter by category or view by project. Add new photos by dropping them in <code>assets/images/projects/</code> and updating each project in <code>projects-data.js</code>.</p>
+  </div>
+</section>
+
+<section class="section section--tight" style="padding-top:20px;">
+  <div class="container">
+    <div class="filters" id="filters"></div>
+    <div class="gallery-grid" id="gallery"></div>
+    <div id="empty" style="display:none;text-align:center;padding:60px 20px;color:var(--text-2);">No images yet for this category.</div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;align-items:center;justify-content:center;padding:30px;cursor:zoom-out;">
+  <img id="lightbox-img" alt="" style="max-width:95%;max-height:95%;object-fit:contain;border-radius:4px;" />
+  <button id="lightbox-close" style="position:absolute;top:20px;right:24px;background:none;border:1px solid rgba(255,255,255,.25);color:#fff;width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:18px;">×</button>
+</div>
+
+<div id="footer"></div>
+
+<script type="module">
+  import { renderHeader, renderFooter } from './js/components.js';
+  import { PROJECTS } from './js/projects-data.js';
+
+  renderHeader();
+  renderFooter();
+
+  const allImages = [];
+  PROJECTS.forEach(p => {
+    (p.images || []).forEach(src => allImages.push({ src, project: p.name, category: p.category, location: p.location }));
+  });
+
+  const cats = ['All', ...new Set(allImages.map(i => i.category))];
+  let active = 'All';
+
+  function renderFilters() {
+    document.getElementById('filters').innerHTML = cats.map(c => `<button class="filter-chip ${active===c?'active':''}" data-c="${c}">${c}</button>`).join('');
+    document.querySelectorAll('#filters .filter-chip').forEach(btn => {
+      btn.addEventListener('click', () => { active = btn.dataset.c; renderFilters(); renderGrid(); });
+    });
+  }
+
+  function renderGrid() {
+    const items = allImages.filter(i => active === 'All' || i.category === active);
+    const grid = document.getElementById('gallery');
+    const empty = document.getElementById('empty');
+    if (items.length === 0) {
+      grid.innerHTML = '';
+      empty.style.display = 'block';
+      empty.innerHTML = `<p>No images yet${active!=='All'?' for <b>'+active+'</b>':''}.</p><p style="font-size:.85rem;color:var(--text-3);">Drop photos into <code>assets/images/projects/&lt;project&gt;/</code> and add their paths in <code>js/projects-data.js</code>.</p>`;
+      return;
+    }
+    empty.style.display = 'none';
+    grid.innerHTML = items.map(i => `
+      <div class="gallery-item" data-src="${i.src}">
+        <img src="${i.src}" alt="${i.project}" loading="lazy" onerror="this.parentElement.innerHTML='<div style=&quot;display:grid;place-items:center;height:100%;color:var(--text-3);font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;&quot;>MISSING</div>'"/>
+        <div class="gallery-item__caption">${i.project} · ${i.location}</div>
+      </div>
+    `).join('');
+    grid.querySelectorAll('.gallery-item').forEach(el => el.addEventListener('click', () => openLb(el.dataset.src)));
+  }
+
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  function openLb(src) { lbImg.src = src; lb.style.display = 'flex'; }
+  function closeLb() { lb.style.display = 'none'; lbImg.src = ''; }
+  lb.addEventListener('click', closeLb);
+  document.getElementById('lightbox-close').addEventListener('click', closeLb);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
+
+  renderFilters();
+  renderGrid();
+</script>
+</body>
+</html>

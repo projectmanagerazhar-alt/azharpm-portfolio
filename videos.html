@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Videos — Azharuddin Mohammed | Project Walkthroughs</title>
+<meta name="description" content="Project walkthrough videos, site progress videos, and completion videos." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div id="header"></div>
+
+<section style="padding: calc(var(--header-h) + 80px) 0 40px;">
+  <div class="container">
+    <span class="section-eyebrow">Videos</span>
+    <h1 class="section-title" style="font-size:clamp(2.4rem,5vw,4rem);">Site walkthroughs & completion videos</h1>
+    <p class="section-lede">Drop video files into <code>assets/videos/</code> and add an entry under each project's <code>videos</code> array in <code>js/projects-data.js</code>.</p>
+  </div>
+</section>
+
+<section class="section section--tight" style="padding-top:20px;">
+  <div class="container">
+    <div class="video-grid" id="video-grid"></div>
+    <div id="empty" style="display:none;text-align:center;padding:60px 20px;color:var(--text-2);">
+      <p>No videos uploaded yet.</p>
+      <p style="font-size:.85rem;color:var(--text-3);">Drop your project videos in <code>assets/videos/</code> and add entries in <code>js/projects-data.js</code>.</p>
+    </div>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script type="module">
+  import { renderHeader, renderFooter } from './js/components.js';
+  import { PROJECTS } from './js/projects-data.js';
+
+  renderHeader();
+  renderFooter();
+
+  const allVideos = [];
+  PROJECTS.forEach(p => {
+    (p.videos || []).forEach(v => allVideos.push({ ...v, project: p.name, location: p.location, year: p.year, id: p.id }));
+  });
+
+  const grid = document.getElementById('video-grid');
+  const empty = document.getElementById('empty');
+
+  if (allVideos.length === 0) {
+    grid.innerHTML = ''; empty.style.display = 'block';
+  } else {
+    grid.innerHTML = allVideos.map(v => `
+      <div class="video-card">
+        <div class="video-card__frame">
+          <video src="${v.src}" controls preload="metadata"
+            onerror="this.outerHTML='<div class=&quot;video-card__placeholder&quot;>VIDEO PLACEHOLDER · drop file at ${v.src}</div>'"></video>
+        </div>
+        <div class="video-card__body">
+          <div class="video-card__title">${v.title}</div>
+          <div class="video-card__meta">${v.project} · ${v.location} · ${v.year}</div>
+          <a href="project.html?id=${encodeURIComponent(v.id)}" style="font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-top:10px;display:inline-block;">View project →</a>
+        </div>
+      </div>
+    `).join('');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Project — Azharuddin Mohammed</title>
+<meta name="description" content="Project detail page — scope, responsibilities, gallery, and outcomes." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div id="header"></div>
+
+<div id="detail-root"></div>
+
+<div id="footer"></div>
+
+<script type="module">
+  import { renderHeader, renderFooter, setMeta } from './js/components.js';
+  import { initReveal } from './js/animations.js';
+  import { PROJECTS } from './js/projects-data.js';
+
+  renderHeader();
+  renderFooter();
+
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  const p = PROJECTS.find(x => x.id === id);
+  const root = document.getElementById('detail-root');
+
+  if (!p) {
+    root.innerHTML = `
+      <section style="padding: calc(var(--header-h) + 120px) 0 120px;text-align:center;">
+        <div class="container">
+          <h1 class="section-title">Project not found</h1>
+          <p class="section-lede" style="margin:0 auto 30px;">The project you are looking for does not exist or may have been moved.</p>
+          <a href="projects.html" class="btn btn--primary">View all projects <span class="arrow">→</span></a>
+        </div>
+      </section>`;
+  } else {
+    setMeta({
+      title: `${p.name} — Azharuddin Mohammed`,
+      description: `${p.name} — ${p.category} project in ${p.location}. ${p.summary}`
+    });
+
+    const img = (src, alt) => `
+      <figure style="margin:0;aspect-ratio:4/3;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;">
+        <img src="${src}" alt="${alt}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<div style=&quot;display:grid;place-items:center;height:100%;color:var(--text-3);font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;&quot;>IMAGE PLACEHOLDER</div>'"/>
+      </figure>`;
+
+    const galleryHTML = (p.images && p.images.length)
+      ? `<div class="gallery-grid">${p.images.map(src => img(src, p.name)).join('')}</div>`
+      : `<div class="notice"><div><b>No gallery images yet.</b> Drop photos into <code>assets/images/projects/${p.id}/</code> and add their paths under <code>images: [...]</code> in <code>js/projects-data.js</code>.</div></div>`;
+
+    const beforeAfterHTML = (p.before?.length || p.after?.length)
+      ? `<div class="before-after">
+            ${(p.before || []).map(src => `<figure><img src="${src}" alt="Before"><figcaption>Before</figcaption></figure>`).join('')}
+            ${(p.after  || []).map(src => `<figure><img src="${src}" alt="After"><figcaption>After</figcaption></figure>`).join('')}
+         </div>`
+      : `<div class="notice"><div><b>No before/after media yet.</b> Add filenames to <code>before</code> and <code>after</code> arrays in <code>js/projects-data.js</code>.</div></div>`;
+
+    const videoHTML = (p.videos && p.videos.length)
+      ? `<div class="video-grid">${p.videos.map(v => `
+          <div class="video-card">
+            <div class="video-card__frame">
+              <video src="${v.src}" controls preload="metadata"
+                onerror="this.outerHTML='<div class=&quot;video-card__placeholder&quot;>VIDEO PLACEHOLDER · ${v.note || 'add file at ' + v.src}</div>'"></video>
+            </div>
+            <div class="video-card__body">
+              <div class="video-card__title">${v.title || p.name}</div>
+              <div class="video-card__meta">${p.location}</div>
+            </div>
+          </div>`).join('')}</div>`
+      : `<div class="notice"><div><b>No videos yet.</b> Add <code>{ src, title }</code> objects to the <code>videos</code> array.</div></div>`;
+
+    root.innerHTML = `
+      <section class="detail-hero">
+        <div class="container">
+          <a href="projects.html" class="detail-hero__back">← All projects</a>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:18px;">
+            <span class="filter-chip active">${p.category}</span>
+            <span class="filter-chip ${p.status==='Completed'?'active':''}">${p.status}</span>
+            <span class="filter-chip">${p.country}</span>
+          </div>
+          <h1 class="detail-hero__title">${p.name}</h1>
+          <p class="section-lede" style="font-size:1.1rem;">${p.summary}</p>
+          <div class="detail-hero__meta">
+            <div>Location <strong>${p.location}</strong></div>
+            <div>Year <strong>${p.year}</strong></div>
+            <div>Client <strong>${p.client}</strong></div>
+            <div>Duration <strong>${p.duration}</strong></div>
+            <div>Project value <strong>${p.value}</strong></div>
+            <div>My role <strong>${p.role}</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="detail-section reveal">
+        <div class="container">
+          <span class="section-eyebrow">Scope</span>
+          <h3>Scope of work</h3>
+          <p>${p.scope}</p>
+        </div>
+      </section>
+
+      <section class="detail-section reveal">
+        <div class="container">
+          <span class="section-eyebrow">Responsibilities</span>
+          <h3>Key responsibilities</h3>
+          <ul>${p.responsibilities.map(r => `<li>${r}</li>`).join('')}</ul>
+        </div>
+      </section>
+
+      <section class="detail-section reveal">
+        <div class="container">
+          <div class="split">
+            <div>
+              <span class="section-eyebrow">Project narrative</span>
+              <h3>Challenges, actions, outcome</h3>
+            </div>
+            <div>
+              <h4 style="font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Challenges</h4>
+              <p>${p.challenges}</p>
+              <h4 style="font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:24px 0 10px;">Actions taken</h4>
+              <p>${p.actions}</p>
+              <h4 style="font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:24px 0 10px;">Final outcome</h4>
+              <p>${p.outcome}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="detail-section reveal">
+        <div class="container">
+          <span class="section-eyebrow">Gallery</span>
+          <h3>Project photos</h3>
+          ${galleryHTML}
+        </div>
+      </section>
+
+      <section class="detail-section reveal">
+        <div class="container">
+          <span class="section-eyebrow">Before / After</span>
+          <h3>Before and after</h3>
+          ${beforeAfterHTML}
+        </div>
+      </section>
+
+      <section class="detail-section reveal">
+        <div class="container">
+          <span class="section-eyebrow">Video</span>
+          <h3>Site & walkthrough video</h3>
+          ${videoHTML}
+        </div>
+      </section>
+
+      <section class="detail-section reveal">
+        <div class="container">
+          <div class="split">
+            <div>
+              <span class="section-eyebrow">Closeout</span>
+              <h3>Authority approvals & handover</h3>
+            </div>
+            <div>
+              <h4 style="font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Authority approvals</h4>
+              <p>${p.authorityNotes}</p>
+              <h4 style="font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:24px 0 10px;">Snagging & handover</h4>
+              <p>${p.handoverNotes}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style="padding:80px 0;">
+        <div class="container" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;">
+          <a href="projects.html" class="btn btn--ghost">← All projects</a>
+          <a href="contact.html" class="btn btn--primary">Discuss a similar project <span class="arrow">→</span></a>
+        </div>
+      </section>
+    `;
+
+    initReveal();
+  }
+</script>
+</body>
+</html>

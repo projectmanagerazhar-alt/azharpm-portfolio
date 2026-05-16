@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Projects — Azharuddin Mohammed | Fit-Out Project Portfolio</title>
+<meta name="description" content="Project portfolio of Azharuddin Mohammed — retail fit-out, salon and beauty lounge, commercial interiors, and renovation projects across UAE and GCC." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div id="header"></div>
+
+<section style="padding: calc(var(--header-h) + 80px) 0 40px;">
+  <div class="container">
+    <span class="section-eyebrow">Projects</span>
+    <h1 class="section-title" style="font-size:clamp(2.4rem,5vw,4rem);">Project archive</h1>
+    <p class="section-lede">Filter by category, status, or country. Click a card to view full project details, scope, gallery, and outcomes.</p>
+  </div>
+</section>
+
+<section class="section section--tight" style="padding-top:20px;">
+  <div class="container">
+    <div class="filters" id="filters-cat" data-group="category"></div>
+    <div class="filters" id="filters-status" data-group="status"></div>
+    <div class="filters" id="filters-country" data-group="country"></div>
+
+    <div id="results-meta" style="font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);margin-bottom:24px;"></div>
+
+    <div class="project-grid" id="project-grid"></div>
+    <div id="empty" style="display:none;text-align:center;padding:80px 20px;color:var(--text-2);">No projects match the current filters.</div>
+  </div>
+</section>
+
+<div id="footer"></div>
+
+<script type="module">
+  import { renderHeader, renderFooter } from './js/components.js';
+  import { initReveal } from './js/animations.js';
+  import { PROJECTS, FILTER_DEFS } from './js/projects-data.js';
+
+  renderHeader();
+  renderFooter();
+
+  const state = { category: 'All', status: 'All', country: 'All' };
+
+  function renderFilters(groupId, group) {
+    const el = document.getElementById(groupId);
+    el.innerHTML = FILTER_DEFS[group].map(v => `<button class="filter-chip ${state[group]===v?'active':''}" data-val="${v}">${v}</button>`).join('');
+    el.querySelectorAll('.filter-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state[group] = btn.dataset.val;
+        renderFilters(groupId, group);
+        renderGrid();
+      });
+    });
+  }
+
+  function renderGrid() {
+    const filtered = PROJECTS.filter(p => {
+      if (state.category !== 'All' && p.category !== state.category) return false;
+      if (state.status   !== 'All' && p.status   !== state.status)   return false;
+      if (state.country  !== 'All' && p.country  !== state.country)  return false;
+      return true;
+    });
+
+    document.getElementById('results-meta').textContent = `${filtered.length} project${filtered.length===1?'':'s'} shown · ${PROJECTS.length} total`;
+
+    const grid = document.getElementById('project-grid');
+    const empty = document.getElementById('empty');
+    if (filtered.length === 0) {
+      grid.innerHTML = ''; empty.style.display = 'block'; return;
+    }
+    empty.style.display = 'none';
+    grid.innerHTML = filtered.map(p => `
+      <a class="card project-card reveal" href="project.html?id=${encodeURIComponent(p.id)}">
+        <div class="project-card__media">
+          <span class="project-card__status project-card__status--${p.status.toLowerCase()}">${p.status}</span>
+          ${p.images && p.images[0]
+            ? `<img src="${p.images[0]}" alt="${p.name}" onerror="this.outerHTML='<div class=\\'project-card__placeholder\\'>${p.category.toUpperCase()} · ${p.country}</div>'" />`
+            : `<div class="project-card__placeholder">${p.category.toUpperCase()} · ${p.country}</div>`
+          }
+        </div>
+        <div class="project-card__body">
+          <div class="project-card__meta">
+            <span>${p.category}</span><span>${p.location}</span><span>${p.year}</span>
+          </div>
+          <h3 class="project-card__title">${p.name}</h3>
+          <p class="project-card__scope">${p.summary}</p>
+          <span class="project-card__link">View project <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M9 1L13 5L9 9M13 5H1" stroke="currentColor" stroke-width="1.2"/></svg></span>
+        </div>
+      </a>
+    `).join('');
+    initReveal();
+  }
+
+  renderFilters('filters-cat', 'category');
+  renderFilters('filters-status', 'status');
+  renderFilters('filters-country', 'country');
+  renderGrid();
+</script>
+</body>
+</html>
